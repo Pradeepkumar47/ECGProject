@@ -1,279 +1,279 @@
-# # # # # report_utils.py
-# # # # from fpdf import FPDF # type: ignore
-# # # # import smtplib
-# # # # from email.mime.multipart import MIMEMultipart
-# # # # from email.mime.text import MIMEText
-# # # # from email.mime.application import MIMEApplication
+# # report_utils.py
+# from fpdf import FPDF # type: ignore
+# import smtplib
+# from email.mime.multipart import MIMEMultipart
+# from email.mime.text import MIMEText
+# from email.mime.application import MIMEApplication
 
-# # # # def generate_pdf_report(user_name, prediction_result, output_path):
-# # # #     pdf = FPDF()
-# # # #     pdf.add_page()
-# # # #     pdf.set_font("Arial", size=14)
-# # # #     pdf.cell(200, 10, txt="Heart Disease Prediction Report", ln=True, align='C')
-# # # #     pdf.ln(10)
-# # # #     pdf.cell(200, 10, txt=f"Name: {user_name}", ln=True)
-# # # #     pdf.cell(200, 10, txt=f"Prediction Result: {prediction_result}", ln=True)
-# # # #     pdf.output(output_path)
+# def generate_pdf_report(user_name, prediction_result, output_path):
+#     pdf = FPDF()
+#     pdf.add_page()
+#     pdf.set_font("Arial", size=14)
+#     pdf.cell(200, 10, txt="Heart Disease Prediction Report", ln=True, align='C')
+#     pdf.ln(10)
+#     pdf.cell(200, 10, txt=f"Name: {user_name}", ln=True)
+#     pdf.cell(200, 10, txt=f"Prediction Result: {prediction_result}", ln=True)
+#     pdf.output(output_path)
 
-# # # # def send_email_with_attachment(receiver_email, subject, body, attachment_path):
-# # # #     sender_email = "your_email@gmail.com"
-# # # #     sender_password = "your_app_password"  # Use an app password
+# def send_email_with_attachment(receiver_email, subject, body, attachment_path):
+#     sender_email = "your_email@gmail.com"
+#     sender_password = "your_app_password"  # Use an app password
 
-# # # #     msg = MIMEMultipart()
-# # # #     msg['From'] = sender_email
-# # # #     msg['To'] = receiver_email
-# # # #     msg['Subject'] = subject
-# # # #     msg.attach(MIMEText(body, 'plain'))
+#     msg = MIMEMultipart()
+#     msg['From'] = sender_email
+#     msg['To'] = receiver_email
+#     msg['Subject'] = subject
+#     msg.attach(MIMEText(body, 'plain'))
 
-# # # #     with open(attachment_path, "rb") as f:
-# # # #         part = MIMEApplication(f.read(), _subtype="pdf")
-# # # #         part.add_header('Content-Disposition', 'attachment', filename="Heart_Report.pdf")
-# # # #         msg.attach(part)
+#     with open(attachment_path, "rb") as f:
+#         part = MIMEApplication(f.read(), _subtype="pdf")
+#         part.add_header('Content-Disposition', 'attachment', filename="Heart_Report.pdf")
+#         msg.attach(part)
 
-# # # #     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-# # # #         server.login(sender_email, sender_password)
-# # # #         server.send_message(msg)
-
-
-# # # from flask import Flask, request, jsonify
-# # # from flask_cors import CORS
-# # # from werkzeug.utils import secure_filename
-# # # from reportlab.pdfgen import canvas
-# # # import smtplib
-# # # from email.mime.multipart import MIMEMultipart
-# # # from email.mime.application import MIMEApplication
-# # # from email.mime.text import MIMEText
-# # # import os
-
-# # # app = Flask(__name__)
-# # # CORS(app)
-
-# # # UPLOAD_FOLDER = "uploads"
-# # # REPORT_FOLDER = "reports"
-# # # os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-# # # os.makedirs(REPORT_FOLDER, exist_ok=True)
-
-# # # def dummy_predict(file_path):
-# # #     return "Abnormal", 87.5, "Signs of possible arrhythmia"
-
-# # # def generate_pdf(email, status, confidence, description, filepath):
-# # #     c = canvas.Canvas(filepath)
-# # #     c.setFont("Helvetica", 14)
-# # #     c.drawString(50, 800, "ECG Prediction Report")
-# # #     c.setFont("Helvetica", 12)
-# # #     c.drawString(50, 760, f"Email: {email}")
-# # #     c.drawString(50, 740, f"Status: {status}")
-# # #     c.drawString(50, 720, f"Confidence: {confidence}%")
-# # #     c.drawString(50, 700, f"Description: {description}")
-# # #     c.save()
-
-# # # def send_email_with_attachment(to_email, subject, body, attachment_path):
-# # #     from_email = "your_email@gmail.com"
-# # #     password = "your_app_password"  # Use an app password
-
-# # #     msg = MIMEMultipart()
-# # #     msg["From"] = from_email
-# # #     msg["To"] = to_email
-# # #     msg["Subject"] = subject
-
-# # #     msg.attach(MIMEText(body, "plain"))
-
-# # #     with open(attachment_path, "rb") as f:
-# # #         part = MIMEApplication(f.read(), Name=os.path.basename(attachment_path))
-# # #         part['Content-Disposition'] = f'attachment; filename="{os.path.basename(attachment_path)}"'
-# # #         msg.attach(part)
-
-# # #     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-# # #         server.login(from_email, password)
-# # #         server.send_message(msg)
-
-# # # @app.route('/predict', methods=['POST'])
-# # # def predict():
-# # #     file = request.files['file']
-# # #     email = request.form['email']
-
-# # #     filename = secure_filename(file.filename)
-# # #     file_path = os.path.join(UPLOAD_FOLDER, filename)
-# # #     file.save(file_path)
-
-# # #     status, confidence, description = dummy_predict(file_path)
-
-# # #     report_path = os.path.join(REPORT_FOLDER, f"{email}_report.pdf")
-# # #     generate_pdf(email, status, confidence, description, report_path)
-
-# # #     send_email_with_attachment(
-# # #         to_email=email,
-# # #         subject="Your ECG Report",
-# # #         body=f"Your prediction is: {status} ({confidence}%). Description: {description}",
-# # #         attachment_path=report_path
-# # #     )
-
-# # #     return jsonify({
-# # #         "status": status,
-# # #         "confidence": confidence,
-# # #         "description": description
-# # #     })
-
-# # # if __name__ == "__main__":
-# # #     app.run(debug=True)
+#     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+#         server.login(sender_email, sender_password)
+#         server.send_message(msg)
 
 
-# # from flask import Flask, request, jsonify
-# # from flask_cors import CORS
-# # from werkzeug.utils import secure_filename
-# # from reportlab.pdfgen import canvas
-# # import smtplib
-# # from email.mime.multipart import MIMEMultipart
-# # from email.mime.application import MIMEApplication
-# # from email.mime.text import MIMEText
-# # import os
+# from flask import Flask, request, jsonify
+# from flask_cors import CORS
+# from werkzeug.utils import secure_filename
+# from reportlab.pdfgen import canvas
+# import smtplib
+# from email.mime.multipart import MIMEMultipart
+# from email.mime.application import MIMEApplication
+# from email.mime.text import MIMEText
+# import os
 
-# # app = Flask(__name__)
-# # CORS(app)
+# app = Flask(__name__)
+# CORS(app)
 
-# # UPLOAD_FOLDER = "uploads"
-# # REPORT_FOLDER = "reports"
-# # os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-# # os.makedirs(REPORT_FOLDER, exist_ok=True)
+# UPLOAD_FOLDER = "uploads"
+# REPORT_FOLDER = "reports"
+# os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+# os.makedirs(REPORT_FOLDER, exist_ok=True)
 
-# # # Function for generating dummy prediction (you can replace it with your model prediction)
-# # def dummy_predict(file_path):
-# #     # Dummy prediction logic
-# #     return "Abnormal", 87.5, "Signs of possible arrhythmia"
+# def dummy_predict(file_path):
+#     return "Abnormal", 87.5, "Signs of possible arrhythmia"
 
-# # # Function to generate PDF report
-# # def generate_pdf(email, status, confidence, description, filepath):
-# #     c = canvas.Canvas(filepath)
-# #     c.setFont("Helvetica", 14)
-# #     c.drawString(50, 800, "ECG Prediction Report")
-# #     c.setFont("Helvetica", 12)
-# #     c.drawString(50, 760, f"Email: {email}")
-# #     c.drawString(50, 740, f"Status: {status}")
-# #     c.drawString(50, 720, f"Confidence: {confidence}%")
-# #     c.drawString(50, 700, f"Description: {description}")
-# #     c.save()
+# def generate_pdf(email, status, confidence, description, filepath):
+#     c = canvas.Canvas(filepath)
+#     c.setFont("Helvetica", 14)
+#     c.drawString(50, 800, "ECG Prediction Report")
+#     c.setFont("Helvetica", 12)
+#     c.drawString(50, 760, f"Email: {email}")
+#     c.drawString(50, 740, f"Status: {status}")
+#     c.drawString(50, 720, f"Confidence: {confidence}%")
+#     c.drawString(50, 700, f"Description: {description}")
+#     c.save()
 
-# # # Function to send email with attachment
-# # def send_email_with_attachment(to_email, subject, body, attachment_path):
-# #     from_email = "your_email@gmail.com"
-# #     password = os.getenv("GMAIL_APP_PASSWORD")  # Load password from environment variable
+# def send_email_with_attachment(to_email, subject, body, attachment_path):
+#     from_email = "your_email@gmail.com"
+#     password = "your_app_password"  # Use an app password
 
-# #     msg = MIMEMultipart()
-# #     msg["From"] = from_email
-# #     msg["To"] = to_email
-# #     msg["Subject"] = subject
+#     msg = MIMEMultipart()
+#     msg["From"] = from_email
+#     msg["To"] = to_email
+#     msg["Subject"] = subject
 
-# #     msg.attach(MIMEText(body, "plain"))
+#     msg.attach(MIMEText(body, "plain"))
 
-# #     with open(attachment_path, "rb") as f:
-# #         part = MIMEApplication(f.read(), Name=os.path.basename(attachment_path))
-# #         part['Content-Disposition'] = f'attachment; filename="{os.path.basename(attachment_path)}"'
-# #         msg.attach(part)
+#     with open(attachment_path, "rb") as f:
+#         part = MIMEApplication(f.read(), Name=os.path.basename(attachment_path))
+#         part['Content-Disposition'] = f'attachment; filename="{os.path.basename(attachment_path)}"'
+#         msg.attach(part)
 
-# #     try:
-# #         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-# #             server.login(from_email, password)
-# #             server.send_message(msg)
-# #     except Exception as e:
-# #         raise ValueError(f"Error sending email: {str(e)}")
+#     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+#         server.login(from_email, password)
+#         server.send_message(msg)
 
-# # # API endpoint for prediction and sending the report
-# # @app.route('/predict', methods=['POST'])
-# # def predict():
-# #     if 'file' not in request.files:
-# #         return jsonify({"error": "No file part"}), 400
+# @app.route('/predict', methods=['POST'])
+# def predict():
+#     file = request.files['file']
+#     email = request.form['email']
 
-# #     file = request.files['file']
-# #     email = request.form.get('email')
+#     filename = secure_filename(file.filename)
+#     file_path = os.path.join(UPLOAD_FOLDER, filename)
+#     file.save(file_path)
 
-# #     if not email:
-# #         return jsonify({"error": "Email is required"}), 400
+#     status, confidence, description = dummy_predict(file_path)
 
-# #     if file.filename == '':
-# #         return jsonify({"error": "No file selected"}), 400
+#     report_path = os.path.join(REPORT_FOLDER, f"{email}_report.pdf")
+#     generate_pdf(email, status, confidence, description, report_path)
 
-# #     try:
-# #         filename = secure_filename(file.filename)
-# #         file_path = os.path.join(UPLOAD_FOLDER, filename)
-# #         file.save(file_path)
+#     send_email_with_attachment(
+#         to_email=email,
+#         subject="Your ECG Report",
+#         body=f"Your prediction is: {status} ({confidence}%). Description: {description}",
+#         attachment_path=report_path
+#     )
 
-# #         # Dummy prediction, replace with actual prediction logic
-# #         status, confidence, description = dummy_predict(file_path)
+#     return jsonify({
+#         "status": status,
+#         "confidence": confidence,
+#         "description": description
+#     })
 
-# #         # Generate PDF report
-# #         report_path = os.path.join(REPORT_FOLDER, f"{email}_report.pdf")
-# #         generate_pdf(email, status, confidence, description, report_path)
+# if __name__ == "__main__":
+#     app.run(debug=True)
 
-# #         # Send the report via email
-# #         send_email_with_attachment(
-# #             to_email=email,
-# #             subject="Your ECG Report",
-# #             body=f"Your prediction is: {status} ({confidence}%). Description: {description}",
-# #             attachment_path=report_path
-# #         )
 
-# #         # Return prediction results
-# #         return jsonify({
-# #             "status": status,
-# #             "confidence": confidence,
-# #             "description": description
-# #         })
+# from flask import Flask, request, jsonify
+# from flask_cors import CORS
+# from werkzeug.utils import secure_filename
+# from reportlab.pdfgen import canvas
+# import smtplib
+# from email.mime.multipart import MIMEMultipart
+# from email.mime.application import MIMEApplication
+# from email.mime.text import MIMEText
+# import os
 
-# #     except Exception as e:
-# #         return jsonify({"error": str(e)}), 500
+# app = Flask(__name__)
+# CORS(app)
 
-# # if __name__ == "__main__":
-# #     app.run(debug=True)
+# UPLOAD_FOLDER = "uploads"
+# REPORT_FOLDER = "reports"
+# os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+# os.makedirs(REPORT_FOLDER, exist_ok=True)
 
-# #//---------------------------------------------------------------
-# # from fastapi import FastAPI, UploadFile, Form
-# # from fastapi.responses import JSONResponse
-# # from pydantic import EmailStr
-# # import shutil
-# # import smtplib
-# # from email.message import EmailMessage
+# # Function for generating dummy prediction (you can replace it with your model prediction)
+# def dummy_predict(file_path):
+#     # Dummy prediction logic
+#     return "Abnormal", 87.5, "Signs of possible arrhythmia"
 
-# # app = FastAPI()
+# # Function to generate PDF report
+# def generate_pdf(email, status, confidence, description, filepath):
+#     c = canvas.Canvas(filepath)
+#     c.setFont("Helvetica", 14)
+#     c.drawString(50, 800, "ECG Prediction Report")
+#     c.setFont("Helvetica", 12)
+#     c.drawString(50, 760, f"Email: {email}")
+#     c.drawString(50, 740, f"Status: {status}")
+#     c.drawString(50, 720, f"Confidence: {confidence}%")
+#     c.drawString(50, 700, f"Description: {description}")
+#     c.save()
 
-# # @app.post("/predict")
-# # async def predict(file: UploadFile, email: EmailStr = Form(...)):
-# #     # Save uploaded file
-# #     with open("temp_ecg.jpg", "wb") as buffer:
-# #         shutil.copyfileobj(file.file, buffer)
+# # Function to send email with attachment
+# def send_email_with_attachment(to_email, subject, body, attachment_path):
+#     from_email = "your_email@gmail.com"
+#     password = os.getenv("GMAIL_APP_PASSWORD")  # Load password from environment variable
 
-# #     # Simulated prediction
-# #     result = {
-# #         "status": "abnormal",
-# #         "confidence": 87,
-# #         "condition": "Atrial Fibrillation",
-# #         "description": "Irregular and often rapid heart rhythm.",
-# #     }
+#     msg = MIMEMultipart()
+#     msg["From"] = from_email
+#     msg["To"] = to_email
+#     msg["Subject"] = subject
 
-# #     # Email report
-# #     send_email_report(email, result)
+#     msg.attach(MIMEText(body, "plain"))
 
-# #     return JSONResponse(content=result)
+#     with open(attachment_path, "rb") as f:
+#         part = MIMEApplication(f.read(), Name=os.path.basename(attachment_path))
+#         part['Content-Disposition'] = f'attachment; filename="{os.path.basename(attachment_path)}"'
+#         msg.attach(part)
 
-# # def send_email_report(to_email: str, result: dict):
-# #     msg = EmailMessage()
-# #     msg["Subject"] = "ECG Report"
-# #     msg["From"] = "your@example.com"
-# #     msg["To"] = to_email
-# #     msg.set_content(
-# #         f"""ECG Prediction Report:
+#     try:
+#         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+#             server.login(from_email, password)
+#             server.send_message(msg)
+#     except Exception as e:
+#         raise ValueError(f"Error sending email: {str(e)}")
 
-# # Status: {result['status']}
-# # Confidence: {result['confidence']}%
-# # Condition: {result['condition']}
-# # Description: {result['description']}
+# # API endpoint for prediction and sending the report
+# @app.route('/predict', methods=['POST'])
+# def predict():
+#     if 'file' not in request.files:
+#         return jsonify({"error": "No file part"}), 400
 
-# # This is an AI-generated result. Please consult a doctor for confirmation."""
-# #     )
+#     file = request.files['file']
+#     email = request.form.get('email')
 
-# #     with smtplib.SMTP("smtp.gmail.com", 587) as server:
-# #         server.starttls()
-# #         server.login("your@example.com", "your-app-password")
-# #         server.send_message(msg)
+#     if not email:
+#         return jsonify({"error": "Email is required"}), 400
+
+#     if file.filename == '':
+#         return jsonify({"error": "No file selected"}), 400
+
+#     try:
+#         filename = secure_filename(file.filename)
+#         file_path = os.path.join(UPLOAD_FOLDER, filename)
+#         file.save(file_path)
+
+#         # Dummy prediction, replace with actual prediction logic
+#         status, confidence, description = dummy_predict(file_path)
+
+#         # Generate PDF report
+#         report_path = os.path.join(REPORT_FOLDER, f"{email}_report.pdf")
+#         generate_pdf(email, status, confidence, description, report_path)
+
+#         # Send the report via email
+#         send_email_with_attachment(
+#             to_email=email,
+#             subject="Your ECG Report",
+#             body=f"Your prediction is: {status} ({confidence}%). Description: {description}",
+#             attachment_path=report_path
+#         )
+
+#         # Return prediction results
+#         return jsonify({
+#             "status": status,
+#             "confidence": confidence,
+#             "description": description
+#         })
+
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
+
+# if __name__ == "__main__":
+#     app.run(debug=True)
+
+#//---------------------------------------------------------------
+# from fastapi import FastAPI, UploadFile, Form
+# from fastapi.responses import JSONResponse
+# from pydantic import EmailStr
+# import shutil
+# import smtplib
+# from email.message import EmailMessage
+
+# app = FastAPI()
+
+# @app.post("/predict")
+# async def predict(file: UploadFile, email: EmailStr = Form(...)):
+#     # Save uploaded file
+#     with open("temp_ecg.jpg", "wb") as buffer:
+#         shutil.copyfileobj(file.file, buffer)
+
+#     # Simulated prediction
+#     result = {
+#         "status": "abnormal",
+#         "confidence": 87,
+#         "condition": "Atrial Fibrillation",
+#         "description": "Irregular and often rapid heart rhythm.",
+#     }
+
+#     # Email report
+#     send_email_report(email, result)
+
+#     return JSONResponse(content=result)
+
+# def send_email_report(to_email: str, result: dict):
+#     msg = EmailMessage()
+#     msg["Subject"] = "ECG Report"
+#     msg["From"] = "your@example.com"
+#     msg["To"] = to_email
+#     msg.set_content(
+#         f"""ECG Prediction Report:
+
+# Status: {result['status']}
+# Confidence: {result['confidence']}%
+# Condition: {result['condition']}
+# Description: {result['description']}
+
+# This is an AI-generated result. Please consult a doctor for confirmation."""
+#     )
+
+#     with smtplib.SMTP("smtp.gmail.com", 587) as server:
+#         server.starttls()
+#         server.login("your@example.com", "your-app-password")
+#         server.send_message(msg)
 
 # #------------------------------------------------------------------
 

@@ -1,0 +1,41 @@
+[33mcommit 4b2cc4753e2ae3e9a284c545c77a36743877d800[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Pradeep kumar <pradeepms950@gmail.com>
+Date:   Thu May 22 10:16:34 2025 +0530
+
+    ECG Arrythmia Classification
+
+project/.bolt/config.json
+project/.bolt/prompt
+project/.env
+project/.gitignore
+project/eslint.config.js
+project/index.html
+project/package-lock.json
+project/package.json
+project/postcss.config.js
+project/src/App.tsx
+project/src/api/api.ts
+project/src/app/.env
+project/src/app/__pycache__/app.cpython-311.pyc
+project/src/app/app.py
+project/src/components/Button.tsx
+project/src/components/Card.tsx
+project/src/components/Container.tsx
+project/src/components/FeatureCard.tsx
+project/src/components/Footer.tsx
+project/src/components/HeroBanner.tsx
+project/src/components/InfoCard.tsx
+project/src/components/Navbar.tsx
+project/src/components/PredictionResult.tsx
+project/src/components/UploadForm.tsx
+project/src/index.css
+project/src/main.tsx
+project/src/pages/HomePage.tsx
+project/src/pages/InformationPage.tsx
+project/src/pages/PredictionPage.tsx
+project/src/vite-env.d.ts
+project/tailwind.config.js
+project/tsconfig.app.json
+project/tsconfig.json
+project/tsconfig.node.json
+project/vite.config.ts
